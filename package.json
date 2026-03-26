@@ -1,0 +1,21 @@
+{
+  "name": "ifc-lite-headless-example",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Headless script: load IFC, count walls, process geometry",
+  "scripts": {
+    "start": "node node_modules/tsx/dist/cli.mjs src/main.ts"
+  },
+  "dependencies": {
+    "@ifc-lite/data": "workspace:*",
+    "@ifc-lite/geometry": "workspace:*",
+    "@ifc-lite/parser": "workspace:*",
+    "@ifc-lite/query": "workspace:*",
+    "@ifc-lite/wasm": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.3.0"
+  }
+}

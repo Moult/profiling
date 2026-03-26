@@ -1,0 +1,16 @@
+{
+  "name": "webifc-profiler",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --import tsx src/main.ts"
+  },
+  "dependencies": {
+    "web-ifc": "^0.0.68"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.3.0"
+  }
+}
