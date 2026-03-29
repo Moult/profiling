@@ -4,10 +4,13 @@ import os
 import sys
 import time
 
+# sys.path.insert(0, "/home/dion/Projects/ios-dm/src/ifcopenshell-python")
+# sys.path.insert(0, "/home/dion/Projects/ios-dm/build/ifcwrap")
+
 import ifcopenshell
 import ifcopenshell.geom
 
-MODELS_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
+MODELS_DIR = os.path.join(os.path.dirname(__file__), "models")
 
 if len(sys.argv) > 1:
     paths = [os.path.join(MODELS_DIR, sys.argv[1]) if not os.path.isabs(sys.argv[1]) else sys.argv[1]]

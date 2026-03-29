@@ -1,4 +1,4 @@
-/* Profile web-ifc across all models in ../../models, sorted by file size. */
+/* Profile web-ifc across all models in ../models, sorted by file size. */
 
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { resolve, dirname, join, basename } from 'node:path';
@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import * as WebIFC from 'web-ifc';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const MODELS_DIR = resolve(__dirname, '..', '..', '..', 'models');
+const MODELS_DIR = resolve(__dirname, '..', '..', 'models');
 
 // ── Build reverse type ID -> name map ────────────────────────────────
 const typeIdToName = new Map<number, string>();

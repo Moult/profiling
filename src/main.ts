@@ -1,4 +1,4 @@
-/* Profile ifc-lite across all models in ../models, sorted by file size. */
+/* Profile ifc-lite across all models in models, sorted by file size. */
 
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { resolve, dirname, join } from 'node:path';
@@ -12,7 +12,7 @@ import {
 import initWasm, { IfcAPI } from '@ifc-lite/wasm';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const MODELS_DIR = resolve(__dirname, '..', '..', 'models');
+const MODELS_DIR = resolve(__dirname, '..', 'models');
 
 // ── Init WASM once ──────────────────────────────────────────────────
 const wasmPkgDir = dirname(fileURLToPath(import.meta.resolve('@ifc-lite/wasm')));

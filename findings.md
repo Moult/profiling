@@ -24,6 +24,18 @@ ifc-lite is the fastest geometry engine when it works, but crashes on 4 of the l
 - **web-ifc**: 1.5-4x faster than IfcOpenShell on most models. Handles all 26 models. One pathological case: private4 (303MB) takes 135s vs IfcOpenShell's 61s.
 - **IfcOpenShell**: Slowest overall but processes everything correctly. Multiprocessed CGAL+OpenCASCADE helps on complex models but can't overcome kernel overhead on simpler ones.
 
+## web-ifc: StreamAllMeshes vs StreamAllMeshesWithTypes
+
+`StreamAllMeshesWithTypes` with a large inclusion list (all types minus a few exclusions) is **4-8x slower** than `StreamAllMeshes`. The inclusion list approach causes web-ifc to iterate per type ID rather than doing a single pass over all entities. For ~100 included type IDs this means ~100 separate passes with redundant internal setup. Filtering should be done in the `StreamAllMeshes` callback instead:
+
+```ts
+api.StreamAllMeshes(modelID, (mesh) => {
+  const typeId = api.GetLineType(modelID, mesh.expressID);
+  if (EXCLUDE_TYPE_IDS.has(typeId)) return;
+  // ...
+});
+```
+
 ## Reliability
 
 | | Models completed | Product count accuracy |
@@ -121,6 +133,8 @@ private4.ifc                                                 302.7M  22.88s  0.0
 
 ### web-ifc
 
+With StreamAllMeshes:
+
 ```
 FILE                                                           SIZE    OPEN   QUERY    GEOM  PRODS
 -----------------------------------------------------------------------------------------------------
@@ -150,6 +164,39 @@ ISSUE_053_20181220Holter_Tower_10.ifc                        169.2M   1.29s  0.0
 private1.ifc                                                 211.7M   1.35s  0.000s   2.65s  19425
 private3.ifc                                                 245.4M   1.61s  0.000s  10.20s 114032
 private4.ifc                                                 302.7M   2.37s  0.000s 135.01s  56580
+```
+
+With StreamAllMeshesWithTypes:
+
+```
+FILE                                                           SIZE    OPEN   QUERY    GEOM  PRODS
+-----------------------------------------------------------------------------------------------------
+duplex.ifc                                                     2.3M   0.03s  0.000s   0.15s    215
+AC20-FZK-Haus.ifc                                              2.4M   0.02s  0.000s   0.15s     83
+ISSUE_005_haus.ifc                                             2.4M   0.01s  0.000s   0.14s     83
+ISSUE_021_Mini Project.ifc                                     3.2M   0.02s  0.000s   1.51s   2636
+Office_A_20110811.ifc                                          3.8M   0.02s  0.000s   0.28s    803
+ISSUE_126_model.ifc                                            4.2M   0.03s  0.000s   0.18s    257
+ISSUE_034_HouseZ.ifc                                           4.8M   0.03s  0.000s   0.27s    228
+ISSUE_102_M3D-CON.ifc                                          6.0M   0.03s  0.000s   0.34s    138
+ISSUE_159_kleine_Wohnung_R22.ifc                               9.5M   0.06s  0.000s   1.45s    425
+C20-Institute-Var-2.ifc                                       10.3M   0.07s  0.000s   0.62s    702
+ISSUE_129_N1540_17_EXE_MOD_448200_02_09_11SMC_IGC_V17.ifc     11.5M   0.07s  0.000s   1.08s    959
+dental_clinic.ifc                                             12.4M   0.10s  0.000s   2.09s   2586
+FM_ARC_DigitalHub.ifc                                         13.4M   0.08s  0.000s   2.37s    705
+ifcbridge-model01.ifc                                         14.5M   0.09s  0.000s   0.57s    165
+ISSUE_102_M3D-CON-CD.ifc                                      25.6M   0.16s  0.000s   3.56s   1616
+S_Office_Integrated Design Archi.ifc                          29.6M   0.20s  0.000s  16.52s   3417
+advanced_model.ifc                                            33.7M   0.23s  0.000s   4.64s   6401
+schependomlaan.ifc                                            47.0M   0.31s  0.000s   2.37s   3569
+ISSUE_068_ARK_NUS_skolebygg.ifc                               53.7M   0.37s  0.000s  13.85s   4459
+ISSUE_098_R8_F1_MAB_AR_M3_XX_XXX_MO_7000.IFC                  68.4M   0.48s  0.000s  82.10s  11124
+private2.ifc                                                 147.4M   1.02s  0.000s   3.50s   4521
+private5.ifc                                                 161.3M   1.12s  0.000s  61.43s  28808
+ISSUE_053_20181220Holter_Tower_10.ifc                        169.2M   1.29s  0.000s  30.24s  60285
+private1.ifc                                                 211.7M   1.33s  0.000s  12.06s  19425
+private3.ifc                                                 245.4M   1.61s  0.000s  39.86s 114032
+private4.ifc                                                 302.7M   2.31s  0.000s 530.82s  56580
 ```
 
 ### ifc-lite
