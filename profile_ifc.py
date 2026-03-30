@@ -39,10 +39,12 @@ for path in paths:
     row["t_query"] = time.perf_counter() - t0
     print(f"  IfcWall: {row['walls']}, IfcSlab: {row['slabs']} (query: {row['t_query']:.3f}s)")
 
+    cpu_count = multiprocessing.cpu_count()
+    cpu_count = 1
     settings = ifcopenshell.geom.settings()
     t0 = time.perf_counter()
     iterator = ifcopenshell.geom.iterator(
-        settings, f, multiprocessing.cpu_count(),
+        settings, f, cpu_count,
         geometry_library="hybrid-cgal-simple-opencascade",
         exclude=["IfcOpeningElement", "IfcOpeningStandardCase", "IfcSpace", "IfcBuilding", "IfcBuildingStorey"],
     )
