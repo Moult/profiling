@@ -4,8 +4,8 @@ import os
 import sys
 import time
 
-# sys.path.insert(0, "/home/dion/Projects/ios-dm/src/ifcopenshell-python")
-# sys.path.insert(0, "/home/dion/Projects/ios-dm/build/ifcwrap")
+sys.path.insert(0, "/home/dion/Projects/ios-dm/src/ifcopenshell-python")
+sys.path.insert(0, "/home/dion/Projects/ios-dm/build/ifcwrap")
 
 import ifcopenshell
 import ifcopenshell.geom
@@ -18,6 +18,13 @@ else:
     paths = sorted(glob.glob(os.path.join(MODELS_DIR, "*.[iI][fF][cC]")), key=os.path.getsize)
 
 results = []
+
+cpu_count = multiprocessing.cpu_count()
+cpu_count = 1
+kernel = "hybrid-cgal-simple-opencascade"
+kernel = "hybrid-manifold-cgal-simple-opencascade"
+print(f"CPU: {cpu_count}")
+print(f"Kernel: {kernel}")
 
 for path in paths:
     name = os.path.basename(path)
@@ -39,13 +46,11 @@ for path in paths:
     row["t_query"] = time.perf_counter() - t0
     print(f"  IfcWall: {row['walls']}, IfcSlab: {row['slabs']} (query: {row['t_query']:.3f}s)")
 
-    cpu_count = multiprocessing.cpu_count()
-    cpu_count = 1
     settings = ifcopenshell.geom.settings()
     t0 = time.perf_counter()
     iterator = ifcopenshell.geom.iterator(
         settings, f, cpu_count,
-        geometry_library="hybrid-cgal-simple-opencascade",
+        geometry_library=kernel,
         exclude=["IfcOpeningElement", "IfcOpeningStandardCase", "IfcSpace", "IfcBuilding", "IfcBuildingStorey"],
     )
     type_counts = {}

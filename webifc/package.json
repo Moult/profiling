@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node --import tsx src/main.ts"
+    "start": "node --import tsx src/main.ts",
+    "perobj": "node node_modules/tsx/dist/cli.mjs src/profile_per_object.ts"
   },
   "dependencies": {
     "web-ifc": "^0.0.68"

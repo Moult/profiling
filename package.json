@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Headless script: load IFC, count walls, process geometry",
   "scripts": {
-    "start": "node node_modules/tsx/dist/cli.mjs src/main.ts"
+    "start": "node node_modules/tsx/dist/cli.mjs src/main.ts",
+    "perobj": "node node_modules/tsx/dist/cli.mjs src/profile_per_object.ts"
   },
   "dependencies": {
     "@ifc-lite/data": "workspace:*",
